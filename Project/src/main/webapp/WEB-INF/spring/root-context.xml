@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<!-- c3p0 -->
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+
+		<property name="driverClass"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="jdbcUrl"
+			value="jdbc:oracle:thin:@221.164.9.205:51521:xe" />
+		<property name="user" value="c##jim" />
+		<property name="password" value="dyddlqkqh0816" />
+		<property name="maxPoolSize" value="100" />
+		<property name="maxIdleTime" value="600" />
+		<property name="idleConnectionTestPeriod" value="300" />
+	</bean>
+
+	<!-- 파일 업로드 -->
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		  
+		  <property name="maxUploadSize" value="10485760" />
+		  <property name="maxInMemorySize" value="10485760" />
+		  <property name="defaultEncoding" value="utf-8" />
+		  
+	</bean>	
+	
+<!-- 파일업로드 디렉토리 설정 --> 
+<!-- 	<bean id="uploadPath" class="java.lang.String"> -->
+<!-- 		<constructor-arg value="G:\\upload"/> -->
+<!-- 	</bean> -->
+
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="sqlSessionTemplate"
+		class="org.mybatis.spring.SqlSessionTemplate"
+		destroy-method="clearCache">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+
+ 	<mybatis-spring:scan base-package="com.project.mapper" />
+	<context:component-scan base-package="com.project.Member"/>
+	<context:component-scan base-package="com.project.board"/>
+	<context:component-scan base-package="com.project.board.reply"/>
+	 
+</beans>
